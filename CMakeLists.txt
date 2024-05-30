@@ -14,7 +14,9 @@ endif()
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
 # Board type
+set(FAMILY rp2040)
 set(PICO_BOARD pico_w CACHE STRING "Board type")
+set(BOARD pico_sdk)
 
 # Toolchain and module path vars for windows
 
@@ -32,6 +34,7 @@ project(${PROJECT_NAME}
 
 # initialize pico sdk
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
 pico_sdk_init()
 
 # ensure pico sdk >= 1.3.0 (not necessary)
