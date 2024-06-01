@@ -7,11 +7,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(PROJECT_NAME "Template")
 set(TARGET_NAME "Template")
 
-# Checks if pico_sdk_path env. variable is set
+# Checks if pico sdk and pico extras env. variables are set
 if(NOT DEFINED ENV{PICO_SDK_PATH})
     message(FATAL_ERROR "PICO_SDK_PATH environment variable is not defined")
 endif()
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
+set(PICO_EXTRAS_PATH $ENV{PICO_EXTRAS_PATH})
 
 # Board type
 set(FAMILY rp2040)
@@ -46,10 +47,11 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
+# Add executable target
+add_executable(${TARGET_NAME})
+
 # Add source files
-add_executable(${TARGET_NAME}
-    src/main.c
-)
+target_sources(${TARGET_NAME} PUBLIC src/main.c)
 
 # Specify target
 target_link_libraries(${TARGET_NAME} PUBLIC pico_stdlib hardware_i2c)
