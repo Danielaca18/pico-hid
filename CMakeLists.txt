@@ -51,10 +51,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(${TARGET_NAME})
 
 # Add source files
-target_sources(${TARGET_NAME} PUBLIC src/main.c)
+target_sources(${TARGET_NAME} PRIVATE src/main.c)
 
 # Specify target
-target_link_libraries(${TARGET_NAME} PUBLIC pico_stdlib hardware_i2c)
+target_link_libraries(${TARGET_NAME} PRIVATE pico_stdlib hardware_i2c)
 
 # Link stdio to usb serial
 pico_enable_stdio_usb(${TARGET_NAME} 1)
