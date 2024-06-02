@@ -38,6 +38,16 @@ include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
 pico_sdk_init()
 
+# compile flags
+add_compile_options(
+    -Wall
+    -Wno-format
+    -Wno-unused-function
+)
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-Wno-maybe-uninitialized)
+endif()
+
 # ensure pico sdk >= 1.3.0 (not necessary)
 if (PICO_SDK_VERSION_STRING VERSION_LESS "1.3.0")
     message(FATAL_ERROR "Raspberry Pi Pico SDK version 1.3.0 (or later) required. Your version is ${PICO_SDK_VERSION_STRING}")
@@ -51,10 +61,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(${TARGET_NAME})
 
 # Add source files
-target_sources(${TARGET_NAME} PRIVATE src/main.c)
+target_sources(${TARGET_NAME} PUBLIC src/main.c)
 
 # Specify target
-target_link_libraries(${TARGET_NAME} PRIVATE pico_stdlib hardware_i2c)
+target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id hardware_i2c tinyusb_device tinyusb_board)
 
 # Link stdio to usb serial
 pico_enable_stdio_usb(${TARGET_NAME} 1)
