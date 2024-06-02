@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.19)
 
-# Set the C/C++ standard
-#set(CMAKE_C_STANDARD 11)
-#set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Set project and target name
 set(PROJECT_NAME "Template")
 set(TARGET_NAME "Template")
+
+# Set the C/C++ standard
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Checks if pico sdk and pico extras env. variables are set
 if(NOT DEFINED ENV{PICO_SDK_PATH})
@@ -20,22 +22,23 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 set(BOARD pico_sdk)
 
 # Toolchain and module path vars for windows
-
 set(CMAKE_TOOLCHAIN_FILE ${PICO_SDK_PATH}/cmake/preload/toolchains/pico_arm_gcc.cmake)
 
 if(WIN32)
     set(CMAKE_MODULE_PATH ${PICO_INSTALL_PATH}/)
 endif()
 
+# include pico sdk
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
+
 # Project name, version and languages
-project(${PROJECT_NAME}
+project(${TARGET_NAME}
     VERSION 1.0 
     LANGUAGES C CXX ASM
 )
 
-# initialize pico sdk
-include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
-include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
+# init pico sdk
 pico_sdk_init()
 
 # compile flags
@@ -63,6 +66,9 @@ set(HEADERS include/tusb_config.h include/usb_descriptors.h)
 
 # Add executable target
 add_executable(${TARGET_NAME})
+
+pico_set_program_name(${TARGET_NAME} "Project")
+pico_set_program_version(${TARGET_NAME} "0.1")
 
 # Add source files
 target_sources(${TARGET_NAME} PUBLIC ${SOURCES} ${HEADERS})
