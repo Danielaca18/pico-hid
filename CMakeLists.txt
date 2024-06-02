@@ -57,11 +57,15 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
+# Add all source paths to a var
+set(SOURCES src/main.c src/usb_descriptors.c)
+set(HEADERS include/tusb_config.h include/usb_descriptors.h)
+
 # Add executable target
 add_executable(${TARGET_NAME})
 
 # Add source files
-target_sources(${TARGET_NAME} PUBLIC src/main.c include/tusb_config.h)
+target_sources(${TARGET_NAME} PUBLIC ${SOURCES} ${HEADERS})
 
 # Specify target
 target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id tinyusb_device tinyusb_board)

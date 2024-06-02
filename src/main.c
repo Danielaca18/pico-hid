@@ -1,7 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "pico/stdlib.h"
 #include "bsp/board.h"
 #include "tusb.h"
-
 #include "usb_descriptors.h"
+
 
 bool tud_hid_not_ready() {
     return !tud_hid_ready();
@@ -31,7 +35,7 @@ void hid_task(void) {
     if (board_millis() - start_ms < interval_ms) return;
     start_ms += interval_ms;
 
-    uint32_t const btn = board_button_read();
+    uint32_t const btn = 1;
     if (tud_suspended() && btn) tud_remote_wakeup();
     else send_hid_report(REPORT_ID_KEYBOARD, btn);
 }
@@ -43,10 +47,21 @@ void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint16_
     if (next_report < REPORT_ID_COUNT) send_hid_report(next_report, board_button_read());
 }
 
+void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize) {}
+
+uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t* buffer, uint16_t reqlen) {
+  return (uint16_t) 1;
+}
+
 int main() {
+    char buffer[4];
+    stdio_init_all();
     board_init();
     tusb_init();
 
+    while (!stdio_usb_connected) sleep_ms(100);
+    printf("Send any message to start the HID device.");
+    while (fgets(buffer, sizeof(buffer), stdin) == NULL);
     while(true) {
         tud_task();
         hid_task();
