@@ -61,10 +61,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(${TARGET_NAME})
 
 # Add source files
-target_sources(${TARGET_NAME} PUBLIC src/main.c)
+target_sources(${TARGET_NAME} PUBLIC src/main.c include/tusb_config.h)
 
 # Specify target
-target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id hardware_i2c tinyusb_device tinyusb_board)
+target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
 
 # Link stdio to usb serial
 pico_enable_stdio_usb(${TARGET_NAME} 1)
