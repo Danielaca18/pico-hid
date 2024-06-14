@@ -10,6 +10,7 @@ git submodule add https://github.com/Danielaca18/repo-template.git
 ```
 
 ### 2. Include the Library
+Include the library in your project by adding the following line to your project cmake:
 ```cmake
 add_subdirectory(pico-hid)
 target_link_libraries(your_project pico_hidlib)
