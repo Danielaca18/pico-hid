@@ -11,14 +11,14 @@ bool tud_hid_not_ready() {
     return !tud_hid_ready();
 }
 
-static void send_hid_report(uint8_t report_id, uint32_t btn) {
+static void send_hid_report(uint8_t report_id, uint8_t key) {
     if (tud_hid_not_ready()) return;
 
     static bool has_key = false;
 
-    if (btn) {
+    if (key) {
         uint8_t keycode[6] = {0};
-        keycode[0] = HID_KEY_6;
+        keycode[0] = key;
 
         tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode);
         has_key = true;
@@ -31,11 +31,12 @@ static void send_hid_report(uint8_t report_id, uint32_t btn) {
 void hid_task(void) {
     const uint32_t interval_ms = 10;
     static uint32_t start_ms = 0;
+    uint32_t time = board_millis();
 
-    if (board_millis() - start_ms < interval_ms) return;
+    if (time - start_ms < interval_ms) return;
     start_ms += interval_ms;
 
-    uint32_t const btn = 1;
+    uint32_t const btn = HID_KEY_6;
     if (tud_suspended() && btn) tud_remote_wakeup();
     else send_hid_report(REPORT_ID_KEYBOARD, btn);
 }
@@ -54,14 +55,10 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_t
 }
 
 int main() {
-    char buffer[4];
-    stdio_init_all();
     board_init();
     tusb_init();
 
-    while (!stdio_usb_connected) sleep_ms(100);
-    printf("Send any message to start the HID device.");
-    while (fgets(buffer, sizeof(buffer), stdin) == NULL);
+    sleep_ms(1000);
     while(true) {
         tud_task();
         hid_task();
