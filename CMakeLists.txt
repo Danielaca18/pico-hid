@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Set project and target name
-set(PROJECT_NAME "hid")
-set(TARGET_NAME "hid")
-set(LIBRARY_NAME "hidlib")
+set(PROJECT_NAME "pico_hid")
+set(TARGET_NAME "pico_hid")
+set(LIBRARY_NAME "pico_hidlib")
 
 # add cmake directory
 include(${CMAKE_SOURCE_DIR}/cmake/import_config.cmake)
@@ -35,8 +35,8 @@ add_executable(${TARGET_NAME} ${SRC} ${INC})
 target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
 
 # Add include directories
-include_directories(${CMAKE_SOURCE_DIR}/lib)
-include_directories(${CMAKE_SOURCE_DIR}/inc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
 # Link stdio to usb serial
 pico_enable_stdio_uart(${TARGET_NAME} 1)
