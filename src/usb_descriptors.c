@@ -185,8 +185,17 @@ char serial[2 * PICO_UNIQUE_BOARD_ID_SIZE_BYTES + 1];
 char const* string_desc_arr [] =
 {
   (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
+#ifndef HID_MANUFACTURER
   "TinyUSB",                     // 1: Manufacturer
+#else
+  HID_MANUFACTURER,
+#endif
+
+#ifndef HID_PRODUCT_NAME
   "TinyUSB Device",              // 2: Product
+#else
+  HID_PRODUCT_NAME,
+#endif
   serial,                        // 3: Serials, uses the flash ID
 };
 
