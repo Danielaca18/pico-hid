@@ -26,20 +26,22 @@ add_subdirectory(src)
 add_subdirectory(inc)
 
 # Setup library
-add_library(${LIBRARY_NAME} ${LIB_SRC} ${INC})
-target_link_libraries(${LIBRARY_NAME} PUBLIC pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
-target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+if (NOT TARGET ${LIBRARY_NAME} AND NOT TARGET ${TARGET_NAME})
+    add_library(${LIBRARY_NAME} ${LIB_SRC} ${INC})
+    target_link_libraries(${LIBRARY_NAME} PUBLIC pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
+    target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-# Setup executable
-add_executable(${TARGET_NAME} ${SRC} ${INC})
-target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
+    # Setup executable
+    add_executable(${TARGET_NAME} ${SRC} ${INC})
+    target_link_libraries(${TARGET_NAME} pico_stdlib pico_unique_id tinyusb_device tinyusb_board)
 
-# Add include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
+    # Add include directories
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-# Link stdio to usb serial
-pico_enable_stdio_uart(${TARGET_NAME} 1)
+    # Link stdio to usb serial
+    pico_enable_stdio_uart(${TARGET_NAME} 1)
 
-# Generate uf2 file for flashing
-pico_add_extra_outputs(${TARGET_NAME})
+    # Generate uf2 file for flashing
+    pico_add_extra_outputs(${TARGET_NAME})
+endif()
