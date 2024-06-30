@@ -6,7 +6,7 @@ set(TARGET_NAME "pico_hid")
 set(LIBRARY_NAME "pico_hidlib")
 
 # add cmake directory
-include(${CMAKE_SOURCE_DIR}/cmake/import_config.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/import_config.cmake)
 
 # include pico sdk
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
